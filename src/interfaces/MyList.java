@@ -1,7 +1,5 @@
 package interfaces;
 
-import java.util.Iterator;
-
 public interface MyList<T> extends Iterable<T> {
     // Adds an element to the end
     void add(T item);

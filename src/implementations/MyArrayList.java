@@ -8,7 +8,7 @@ public class MyArrayList<T> implements MyList<T> {
     private int size;            // current number of elements in the list
     private static final int DEFAULT_CAPACITY = 10; // default initial capacity
 
-    // Constructor without arguments (default capacity)
+    // Default constructor with default capacity
     public MyArrayList() {elements = new Object[DEFAULT_CAPACITY];}
 
     // Constructor with specified initial capacity
