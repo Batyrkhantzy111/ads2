@@ -2,10 +2,7 @@ package implementations;
 
 import interfaces.MyList;
 
-import java.util.Comparator;
 import java.util.Iterator;
-import java.util.Spliterator;
-import java.util.function.Consumer;
 
 public class MyLinkedList<T> implements MyList<T> {
     private class MyNode {
@@ -195,11 +192,6 @@ public class MyLinkedList<T> implements MyList<T> {
     }
 
     @Override
-    public void sort() {
-        sort((a, b) -> ((Comparable<T>) a).compareTo(b));
-    }
-
-    @Override
     public int indexOf(Object object) {
         int index = 0;
         for (T data : this) {
@@ -279,75 +271,4 @@ public class MyLinkedList<T> implements MyList<T> {
             }
         };
     }
-
-    @Override
-    public void forEach(Consumer<? super T> action) {
-        if (action == null) {
-            throw new NullPointerException();
-        }
-        for (MyNode current = head; current != null; current = current.next) {
-            action.accept(current.data);
-        }
-    }
-
-    @Override
-    public Spliterator<T> spliterator() {
-        return new MyLinkedListSpliterator(head, size);
-    }
-
-    private class MyLinkedListSpliterator implements Spliterator<T> {
-        private MyNode current;
-        private int est; // оставшееся число элементов (оценка размера)
-
-        MyLinkedListSpliterator(MyNode start, int est) {
-            this.current = start;
-            this.est = est;
-        }
-
-        @Override
-        public boolean tryAdvance(Consumer<? super T> action) {
-            if (action == null)
-                throw new NullPointerException();
-            if (current != null) {
-                action.accept(current.data);
-                current = current.next;
-                est--;
-                return true;
-            }
-            return false;
-        }
-
-        @Override
-        public Spliterator<T> trySplit() {
-            // Если элементов меньше двух — разделение не имеет смысла
-            if (est < 2 || current == null) {
-                return null;
-            }
-            // Определяем, сколько элементов отдать в новый spliterator (примерно половину оставшихся)
-            int splitSize = est / 2;
-            MyNode splitHead = current;
-            // Пройдем splitSize элементов
-            for (int i = 0; i < splitSize; i++) {
-                current = current.next;
-            }
-            // Обновляем оценку оставшихся элементов для текущего spliterator
-            est -= splitSize;
-            // Возвращаем новый spliterator, который будет обрабатывать первую половину данного диапазона
-            return new MyLinkedListSpliterator(splitHead, splitSize);
-        }
-
-        @Override
-        public long estimateSize() {
-            return est;
-        }
-
-        @Override
-        public int characteristics() {
-            // ORDERED — элементы имеют фиксированный порядок (как в связанном списке)
-            // SIZED — оценка размера является точной, если список не изменяется
-            // SUBSIZED — любое разделение (splitting) суммарно дает точный размер
-            return ORDERED | SIZED | SUBSIZED;
-        }
-    }
-
 }

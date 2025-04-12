@@ -125,20 +125,14 @@ public class MyArrayList<T> implements MyList<T> {
     }
 
     @Override
-    public void sort() {
-        sort((a, b) -> ((Comparable <T>) a).compareTo(b));
-    }
-
-    @Override
     public void sort(java.util.Comparator<T> cmp) {
         for (int i = 0; i < size - 1; i++) {
             for (int j = 0; j < size - i - 1; j++) {
                 T a = (T) elements[j];
                 T b = (T) elements[j + 1];
                 if (cmp.compare(a, b) > 0) {
-                    T temp = a;
                     elements[j] = b;
-                    elements[j+1] = temp;
+                    elements[j+1] = a;
                 }
             }
         }
@@ -234,7 +228,7 @@ public class MyArrayList<T> implements MyList<T> {
 
             @Override
             public T next() {
-                return (T) elements[cursor++];
+                return get(cursor++);
             }
         };
     }

@@ -35,7 +35,6 @@ public interface MyList<T> extends Iterable<T> {
     T removeLast();
 
     // Sorts the list
-    void sort();
     void sort(java.util.Comparator<T> cmp);
 
     // Returns the index of the first occurrence of the object, or -1 if not found
